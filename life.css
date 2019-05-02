@@ -1,0 +1,13 @@
+#main {
+	border: 1px solid black;
+	opacity: 0.3;
+	width: 950px;
+	height: 950px;
+}
+
+.cell:hover {
+	background-color: red;
+}
+.alive {
+	background-color: black;
+}
