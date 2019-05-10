@@ -4,7 +4,7 @@ const totalCells = 10000
 const colNumber = 100
 const rowNumber = 100
 
-const aliveCells = [4643,4644,4645,4647,4648,4649,4742,4746,4750,4842,4850,4943,4949,5044,5048,5145,5147,5246]
+const aliveCells = [/*4643,4644,4645,4647,4648,4649,4742,4746,4750,4842,4850,4943,4949,5044,5048,5145,5147,5246*/]
 let cells = [...Array(totalCells).keys()].map(x => aliveCells.includes(x))
 const main = document.getElementById('main')
 
@@ -36,13 +36,13 @@ const init = () => {
 */
 const life = (keepState) => {
 	const nextGen = cells.map((cellState, cellIdx) => {
-		const row = main.childNodes.item(getRow(cellIdx) + 2)
-		const cell = row.childNodes.item(getCol(cellIdx))
+		//const row = main.childNodes.item(getRow(cellIdx))
+		//const cell = row.childNodes.item(getCol(cellIdx))
 		let isAlive
 		if (!keepState)	isAlive = cellState ? resolveAlive(cellIdx) : resolveDead(cellIdx)
 		else isAlive = cellState
 	
-		setCellDisplay(cell, isAlive)
+		//setCellDisplay(cell, isAlive)
 		return isAlive
 	})
 	cells = nextGen
@@ -97,13 +97,18 @@ const getRow = (cellIdx) => Math.floor(cellIdx / 100)
 const getCol = (cellIdx) => cellIdx % 100
 
 /**
+* Return the column of the cell at the given index. Start at 0.
+*/
+const cellIdx = (row, col) => this.rowNumber * r + c
+
+/**
 * Toggle the cell State.
 * It deals with the data and the display.
 */
-const toggleCell = (cell, cellIdx) => (event) => {
+const toggleCell = (cellIdx, event) => {
 	if (event.type === 'click' || (event.type === 'mouseover' && event.buttons === 1)) {
 		cells[cellIdx] = !cells[cellIdx]
-		setCellDisplay(cell, cells[cellIdx])
+		setCellDisplay(event.target, cells[cellIdx])
 	}
 }
 
@@ -128,9 +133,24 @@ const reset = () => {
 * Utilities
 */
 let speed = 200
+let intervalIds = []
 const speedUp = () => speed = Math.max(0, speed - 50)
 const slowDown = () => speed = speed + 50
-let intervalIds = []
 const start = () => intervalIds.push(window.setInterval(life, speed))
 const stop = () => intervalIds.forEach((id) => window.clearInterval(id))
-init()
+
+var app = new Vue({
+	el: '#app',
+	data: {
+		speed,
+		rowNumber,
+		colNumber,
+		totalCells,
+		cells,
+	},
+	methods: {
+		toggleCell,
+		setCellDisplay,
+		cellIdx,
+	},
+})
