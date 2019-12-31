@@ -4,7 +4,29 @@ const totalCells = 10000
 const colNumber = 100
 const rowNumber = 100
 
-const aliveCells = [4643,4644,4645,4647,4648,4649,4742,4746,4750,4842,4850,4943,4949,5044,5048,5145,5147,5246]
+const aliveCells = [
+    3007, 3008,
+    3107, 3108,
+    
+    2717,
+    2817, 2818, 2819, 2820,
+    2918, 2919, 2920, 2921,
+    3018, 3021,
+    3118, 3119, 3120, 3121,
+    3217, 3218, 3219, 3220,
+    3317,
+    
+    2932, 2933,
+    3031, 3033,
+    3130, 3131, 3132,
+    3229, 3230, 3231,
+    3330, 3331, 3332,
+    3431, 3433,
+    3532, 3533,
+    
+    3141, 3142,
+    3241, 3242
+]
 let cells = [...Array(totalCells).keys()].map(x => aliveCells.includes(x))
 const main = document.getElementById('main')
 
@@ -128,9 +150,19 @@ const reset = () => {
 * Utilities
 */
 let speed = 200
-const speedUp = () => speed = Math.max(0, speed - 50)
-const slowDown = () => speed = speed + 50
+const speedUp = () => restart(Math.max(1, speed - 50))
+const slowDown = () => restart(speed + 50)
 let intervalIds = []
-const start = () => intervalIds.push(window.setInterval(life, speed))
-const stop = () => intervalIds.forEach((id) => window.clearInterval(id))
+const start = () => !intervalIds.length && intervalIds.push(window.setInterval(life, speed))
+const stop = () => {
+    intervalIds.forEach((id) => window.clearInterval(id))
+    intervalIds = []
+}
+const restart = sleep => {
+    speed = sleep
+    if (intervalIds.length) {
+        stop()
+        start()
+    }
+}
 init()
